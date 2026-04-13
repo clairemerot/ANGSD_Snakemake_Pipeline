@@ -19,8 +19,8 @@ rule angsd_snps_allSamples:
         out = f'{ANGSD_DIR}/snps/allSamples/{{chrom}}/{{chrom}}_allSamples_snps'
     threads: 4
     resources:
-        mem_mb = lambda wildcards, attempt: attempt * 24000,
-        runtime = 1440
+        mem_mb = lambda wildcards, attempt: attempt * 100000,
+        runtime = 2880
     shell:
         """
         angsd -GL 1 \
@@ -39,9 +39,8 @@ rule angsd_snps_allSamples:
             -remove_bads 1 \
             -skipTriallelic 1 \
             -uniqueOnly 1 \
+            -nQueueSize 50 \
             -only_proper_pairs 1 \
-            -dosnpstat 1 \
-            -doHWE 1 \
             -r {wildcards.chrom} \
             -bam {input.bams} 2> {log}
         """
